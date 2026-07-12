@@ -7,7 +7,10 @@ const lengthErr = "must be between 1 and 10 characters.";
 const validateUser = [
     body("firstName").trim().isAlpha().withMessage(`First name ${alphaErr}`)
     .isLength({ min: 1, max: 10}).withMessage(`First name ${lengthErr}`),
-    body("lastName").trim().isAlpha().withMessage(`Last name ${alphaErr}`).isLength({ min: 1, max: 10}).withMessage(`Last name ${lengthErr}`)
+    body("lastName").trim().isAlpha().withMessage(`Last name ${alphaErr}`).isLength({ min: 1, max: 10}).withMessage(`Last name ${lengthErr}`),
+    body("email").trim().isEmail().withMessage("Email must be valid"),
+    body("age").optional().isInt( {min: 18, max: 120} ).withMessage("Age must be between 18 and 120"),
+    body("bio").optional().isLength({max: 200}).withMessage("Bio can not be longer than 200 characters")
 ];
 
 exports.usersListGet = (req, res) => {
@@ -33,8 +36,8 @@ exports.usersCreatePost = [
                 errors: errors.array(),
             });
         }
-        const { firstName, lastName } = matchedData(req);
-        usersStorage.addUser({ firstName, lastName});
+        const { firstName, lastName, email, age, bio } = matchedData(req);
+        usersStorage.addUser({ firstName, lastName, email, age, bio });
         res.redirect("/");
     }
 ];
@@ -59,8 +62,8 @@ exports.usersUpdatePost = [
                 errors: errors.array(),
             });
         }
-        const { firstName, lastName } = matchedData(req);
-        usersStorage.updateUser(req.params.id, { firstName, lastName });
+        const { firstName, lastName, email, age, bio } = matchedData(req);
+        usersStorage.updateUser(req.params.id, { firstName, lastName, email, age, bio });
         res.redirect("/")
     }
 ];
