@@ -1,27 +1,31 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <title><%= title %></title>
+    <title>Search results</title>
 </head>
 <body>
-    <h1><%= title  %></h1>
-    <form action="/search" method="GET">
-        <input type="text" name="search" id="search" placeholder="Enter name or email">
-        <button type="submit">Search</button>
-    </form>
-    <ul>
-    <% if (locals.users) { %>
+    <h1>Search Results: </h1>
+    <p>You searched for: <%= searchQuery %></p>
+    <% if (users.length === 0) { %>
+        <p>No users found...</p>
+        <% } %>
+    
+    <% if (locals.users && users.length > 0) { %>
+        <ul>
         <% users.forEach(user => { %>
         <li>
             ID: <%= user.id %> 
             <br>
             Name: <%= user.firstName %> <%= user.lastName %>
+            <br>
+            Email: <%= user.email %>
             <%  if (user.age) { %> 
             <br>
             Age: <%= user.age %><% } %>
             <% if (user.bio) {%>
             <br>
             Bio: <%= user.bio %> <% } %>
+            
             <div class="user-actions">
             <a href="/<%= user.id %>/update">Update</a>
             <form action="/<%= user.id %>/delete" method="POST">
@@ -33,9 +37,9 @@
             
         </li>
             <% }) %>
+            </ul>
     <% } %>
-    </ul>
-    <a href="/create">Create a user</a>
+    <a href="/">Back to all users</a>
 
 </body>
 </html>

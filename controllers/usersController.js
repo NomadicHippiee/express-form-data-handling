@@ -20,6 +20,25 @@ exports.usersListGet = (req, res) => {
     });
 };
 
+exports.usersSearchGet = (req, res) => {
+    const searchQuery = req.query.search || "";
+    let users;
+
+    if (searchQuery) {
+        users = usersStorage.searchUsers(searchQuery);
+
+    }else {
+        users = usersStorage.getUsers();
+    }
+
+    res.render("search", {
+        title: "Search results",
+        users: users,
+        searchQuery: searchQuery,
+    });
+
+};
+
 exports.usersCreateGet = (req, res) => {
     res.render("createUser", {
         title: "Create user",
